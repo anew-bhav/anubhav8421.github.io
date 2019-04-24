@@ -1,40 +1,29 @@
-
-var mymap = L.map('mapid', {
-    center: [20.5937, 78.9629],
-    zoom: 4
-  }
-);
-
-L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/light-v10/tiles/256/{z}/{x}/{y}{r}?access_token={accessToken}', {
-    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-    maxZoom: 10,
-    id: 'mapbox.dark',
-    accessToken: 'pk.eyJ1IjoiYW51YmhhdmoxOTk2IiwiYSI6ImNqdW81MWN5ZTFhcWQ0NHB3NmtvNHZqdXcifQ.5-O6nhehA-kvqjdg9NJmHg'
-}).addTo(mymap);
-
 function makeAjaxCall(url, methodType, callback){
-   var xhr = new XMLHttpRequest();
-   xhr.onreadystatechange = function(){
-     if (xhr.readyState === 4){
-        if (xhr.status === 200){
-           console.log("xhr done successfully");
-           var resp = xhr.responseText;
-           callback(resp);
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function(){
+        if (xhr.readyState === XMLHttpRequest.DONE){
+            if (xhr.status === 200){
+                map.messagebox.show('Map loaded successfully');
+                console.log("xhr done successfully");
+                var resp = xhr.responseText;
+                callback(resp);
+            } else {
+                map.messagebox.show('Some error occured !!');
+                console.log("xhr failed");
+            }
         } else {
-          console.log("xhr failed");
+            map.messagebox.show('Map is bieng loaded ...');
+            console.log("xhr processing going on");
         }
-     } else {
-        console.log("xhr processing going on");
-     }
-  };
-  xhr.open(methodType, url, true);
-  xhr.send();
-  console.log("request sent succesfully");
+    };
+    xhr.open(methodType, url, true);
+    xhr.send();
+    map.messagebox.show('Request sent to server successfully');
+    console.log("request sent succesfully");
 }
 
 function getUsers() {
   var URL = "https://randomuser.me/api/?results=70&inc=name,location,picture&noinfo";
-
   makeAjaxCall(URL, "GET", processUsers);
 }
 
@@ -70,7 +59,7 @@ var UserIcon = L.Icon.extend({
 
 function createIcon(user) {
   var userIcon = new UserIcon({iconUrl: user.imageurl})
-  L.marker(user.latlong, {icon: userIcon}).addTo(mymap).bindPopup(`Hi, My name is ${user.name}`)
+  L.marker(user.latlong, {icon: userIcon}).addTo(map).bindPopup(`Hi, My name is ${user.name}`)
 }
 
 function processUsers(rawData){
@@ -84,13 +73,3 @@ function processUsers(rawData){
 }
 
 getUsers();
-
-
-
-
-
-
-
-
-
-
