@@ -57,19 +57,25 @@ var UserIcon = L.Icon.extend({
   }
 });
 
-function createIcon(user) {
-  var userIcon = new UserIcon({iconUrl: user.imageurl})
-  L.marker(user.latlong, {icon: userIcon}).addTo(map).bindPopup(`Hi, My name is ${user.name}`)
+function createIconMarker(user) {
+    var userIcon = new UserIcon({iconUrl: user.imageurl});
+    var marker =  L.marker(user.latlong, { icon: userIcon });
+    marker.bindPopup(`Hi, My name is ${user.name}`);
+    return marker;
 }
 
 function processUsers(rawData){
-  var data = JSON.parse(rawData);
-  var userData = data.results;
-  var user;
-  for (i=0;i<userData.length-1;i++){
-    user = createUser(userData[i]);
-    createIcon(user)
-  }
+    var data = JSON.parse(rawData);
+    var userData = data.results;
+    var user;
+    var marker;
+
+    for (i=0;i<userData.length;i++){
+        user = createUser(userData[i]);
+        marker = createIconMarker(user);
+        markers.addLayer(marker);
+    }
 }
 
 getUsers();
+map.addLayer(markers);

@@ -4,12 +4,18 @@ var attribution =   'Map data &copy; <a href="https://www.openstreetmap.org/">Op
 
 var map = L.map('mapid', {
     minZoom: 2,
-    maxZoom: 12,
+    maxZoom: 6,
     zoomSnap: 1,
     zoomDelta: 1,
     center: [39,34], //sets initial amp center
     zoom: 2, //sets initial zoom level
     messagebox: true
+});
+
+var markers = L.markerClusterGroup({
+    showCoverageOnHover: false,
+    maxClusterRadius: 180,
+    spiderfyOnMaxZoom: true
 });
 
 var tileUrl     = 'https://api.mapbox.com/styles/v1/mapbox/light-v10/tiles/256/{z}/{x}/{y}{r}?access_token={accessToken}';
